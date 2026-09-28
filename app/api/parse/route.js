@@ -87,8 +87,10 @@ function buildFormats(info) {
     if (!f.url) continue;
     if (f.protocol && /m3u8|dash|f4m|ism/i.test(f.protocol)) continue;
 
-    const hasVideo = f.vcodec && f.vcodec !== 'none';
-    const hasAudio = f.acodec && f.acodec !== 'none';
+    // 注意：generic 直链的 vcodec/acodec 为 null（未知），应视为“有”；
+    // 正规提取器只会返回具体 codec 或 'none'
+    const hasVideo = f.vcodec !== 'none';
+    const hasAudio = f.acodec !== 'none';
     const filesize = f.filesize || f.filesize_approx || null;
 
     if (hasVideo && hasAudio) {
